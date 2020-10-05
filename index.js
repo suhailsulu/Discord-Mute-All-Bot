@@ -6,20 +6,31 @@ const TOKEN = process.env.TOKEN;
 bot.login(TOKEN);
 
 bot.on('ready', () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
+    console.info(`Logged in as ${bot.user.tag}!`);
 });
 
-bot.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('pong');
-    msg.channel.send('pong');
+bot.on('message', async msg => {
+    if (msg.content === 'mute all') {
 
-  } else if (msg.content.startsWith('!kick')) {
-    if (msg.mentions.users.size) {
-      const taggedUser = msg.mentions.users.first();
-      msg.channel.send(`You wanted to kick: ${taggedUser.username}`);
-    } else {
-      msg.reply('Please tag a valid user!');
+        if (msg.member.voiceChannelID) {
+            let channel = msg.guild.channels.get(msg.member.voiceChannelID);
+            for (const [memberID, member] of channel.members) {
+                member.setMute(true);
+            }
+            msg.channel.send('muted');
+        } else {
+            msg.reply('You need to join a voice channel first!');
+        }
+    } else if (msg.content === 'unmute all') {
+        if (msg.member.voiceChannelID) {
+            let channel = msg.guild.channels.get(msg.member.voiceChannelID);
+            for (const [memberID, member] of channel.members) {
+                member.setMute(false);
+            }
+            msg.channel.send('unmuted');
+        } else {
+            msg.reply('You need to join a voice channel first!');
+        }
     }
-  }
+
 });
