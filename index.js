@@ -54,7 +54,7 @@ bot.on('message', async msg => {
                                     member.voice.setMute(true);
                                 }
                             }
-                            msg.channel.send('muted');
+                            msg.channel.send('muted everyone except bot and you ');
                         } else if (transcription === "unmute everyone") {
 
                             for (const [memberID, member] of voiceChannel.members) {
